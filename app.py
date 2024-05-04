@@ -103,6 +103,10 @@ with st.sidebar:
         - Sua opinião é importante para nós! Use o formulário de feedback disponível na aba de configurações para enviar suas sugestões.
         """)
 
+        
+        st.write("### Como Iniciar")
+        st.write("- Acesse a interface principal.\n- Visualize o menu de seleção de modelos na parte superior da tela.")
+
     # Campo para definir o prompt do sistema
     system_prompt = st.text_area("Defina o prompt do sistema:")
     if st.button("Confirmar Prompt"):
