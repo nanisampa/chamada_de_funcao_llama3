@@ -8,9 +8,10 @@ def icon(emoji: str):
     """Mostra um emoji como ícone de página no estilo Notion."""
     st.write(f'<span style="font-size: 78px; line-height: 1">{emoji}</span>', unsafe_allow_html=True)
 
-st.set_page_config(page_icon="💬", layout="wide", page_title="Geomaker Chat Interface")
+st.set_page_config(page_icon="💬 Prof. Marcelo Claro", layout="wide", page_title="Geomaker Chat Interface")
 icon("🌎")  # Exibe o ícone de carro de corrida
 st.subheader("Geomaker Chat Streamlit App")
+st.subheader("Professor Marcelo Claro")
 
 # Verifica a configuração da chave API e inicializa o cliente API
 if "GROQ_API_KEY" in st.secrets:
