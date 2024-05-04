@@ -1,6 +1,5 @@
 # Importa as bibliotecas necessárias
 from langchain_groq import ChatGroq
-import os
 import yfinance as yf
 import pandas as pd
 from langchain_core.tools import tool
@@ -9,7 +8,7 @@ from datetime import date
 import plotly.graph_objects as go
 import streamlit as st
 
-# Define a função para obter informações detalhadas sobre uma ação específica
+# Decorador para funções que atuam como ferramentas em um modelo de linguagem
 @tool
 def get_stock_info(symbol, key):
     """
@@ -17,9 +16,8 @@ def get_stock_info(symbol, key):
     """
     data = yf.Ticker(symbol)  # Cria um objeto Ticker para o símbolo especificado
     stock_info = data.info  # Obtém todas as informações disponíveis sobre a ação
-    return stock_info[key]  # Retorna o valor para a chave especificada
+    return stock_info.get(key, f"Chave '{key}' não encontrada.")  # Retorna o valor para a chave especificada
 
-# Define a função para obter os preços históricos de uma ação
 @tool
 def get_historical_price(symbol, start_date, end_date):
     """
@@ -41,7 +39,7 @@ def plot_price_over_time(historical_price_dfs):
         full_df = full_df.merge(df, on='Date', how='outer')  # Mescla os DataFrames pelo campo 'Date'
 
     fig = go.Figure()  # Cria uma figura Plotly
-    for column in full_df.columns[1:]:  # Adiciona uma linha para cada coluna de ações no DataFrame
+    for column in full_df.columns[1:]:
         fig.add_trace(go.Scatter(x=full_df['Date'], y=full_df[column], mode='lines+markers', name=column))
 
     # Configura o layout do gráfico
@@ -89,7 +87,7 @@ def main():
     """
     Função principal para executar a aplicação Streamlit.
     """
-    api_key = "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"  # Substitua com sua chave real de API
+    api_key = "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"  # Chave de API definida diretamente
     llm = ChatGroq(groq_api_key=api_key, model='llama3-70b-8192')
     tools = [get_stock_info, get_historical_price]
     llm_with_tools = llm.bind_tools(tools)
