@@ -1,104 +1,121 @@
-# Importa as bibliotecas necessárias
-from langchain_groq import ChatGroq
-import yfinance as yf
-import pandas as pd
-from langchain_core.tools import tool
-from langchain_core.messages import AIMessage, SystemMessage, HumanMessage, ToolMessage
-from datetime import date
-import plotly.graph_objects as go
 import streamlit as st
+from typing import Generator
+from groq import Groq
 
-# Decorador para funções que atuam como ferramentas em um modelo de linguagem
-@tool
-def get_stock_info(symbol, key):
-    """
-    Retorna informações detalhadas sobre a ação especificada pelo símbolo e chave.
-    """
-    data = yf.Ticker(symbol)  # Cria um objeto Ticker para o símbolo especificado
-    stock_info = data.info  # Obtém todas as informações disponíveis sobre a ação
-    return stock_info.get(key, f"Chave '{key}' não encontrada.")  # Retorna o valor para a chave especificada
+st.set_page_config(page_icon="💬", layout="wide", page_title="Groq Goes Brrrrrrrr...")
 
-@tool
-def get_historical_price(symbol, start_date, end_date):
-    """
-    Retorna os preços históricos de uma ação entre as datas especificadas.
-    """
-    data = yf.Ticker(symbol)  # Cria um objeto Ticker para o símbolo especificado
-    hist = data.history(start=start_date, end=end_date)  # Obtém o histórico de preços
-    hist = hist.reset_index()  # Reseta o índice para fazer a data uma coluna normal
-    hist[symbol] = hist['Close']  # Cria uma coluna com o preço de fechamento
-    return hist[['Date', symbol]]  # Retorna um DataFrame com data e preço de fechamento
 
-# Função para criar gráficos dos preços das ações ao longo do tempo
-def plot_price_over_time(historical_price_dfs):
-    """
-    Cria um gráfico dos preços das ações ao longo do tempo com os dados fornecidos.
-    """
-    full_df = pd.DataFrame(columns=['Date'])  # Inicializa um DataFrame vazio
-    for df in historical_price_dfs:
-        full_df = full_df.merge(df, on='Date', how='outer')  # Mescla os DataFrames pelo campo 'Date'
-
-    fig = go.Figure()  # Cria uma figura Plotly
-    for column in full_df.columns[1:]:
-        fig.add_trace(go.Scatter(x=full_df['Date'], y=full_df[column], mode='lines+markers', name=column))
-
-    # Configura o layout do gráfico
-    fig.update_layout(
-        title='Preço das Ações ao Longo do Tempo',
-        xaxis_title='Data',
-        yaxis_title='Preço da Ação (USD)',
-        yaxis_tickprefix='$',
-        yaxis_tickformat=',.2f',
-        plot_bgcolor='white',
-        paper_bgcolor='white'
+def icon(emoji: str):
+    """Shows an emoji as a Notion-style page icon."""
+    st.write(
+        f'<span style="font-size: 78px; line-height: 1">{emoji}</span>',
+        unsafe_allow_html=True,
     )
-    st.plotly_chart(fig, use_container_width=True)  # Exibe o gráfico no Streamlit
 
-# Função que coordena a obtenção de informações e gráficos baseados no prompt do usuário
-def call_functions(llm_with_tools, user_prompt):
-    """
-    Coordena as funções de obtenção de informações e gráficos de ações com base no prompt do usuário.
-    """
-    system_prompt = f'Você é um assistente financeiro útil que analisa ações e preços de ações. Hoje é {date.today()}'
-    messages = [SystemMessage(system_prompt), HumanMessage(user_prompt)]
-    ai_msg = llm_with_tools.invoke(messages)
-    messages.append(ai_msg)
-    historical_price_dfs = []
-    symbols = []
 
-    for tool_call in ai_msg.tool_calls:
-        selected_tool = {"get_stock_info": get_stock_info, "get_historical_price": get_historical_price}[tool_call["name"].lower()]
-        tool_output = selected_tool.invoke(tool_call["args"])
-        if tool_call['name'] == 'get_historical_price':
-            historical_price_dfs.append(tool_output)
-            symbols.append(tool_output.columns[1])
-        else:
-            messages.append(ToolMessage(tool_output, tool_call_id=tool_call["id"]))
+icon("🏎️")
 
-    if len(historical_price_dfs) > 0:
-        plot_price_over_time(historical_price_dfs)
-        symbols = ' e '.join(symbols)
-        messages.append(ToolMessage(f'Um gráfico de preços históricos para {symbols} foi gerado.', tool_call_id=0))
+st.subheader("Groq Chat Streamlit App", divider="rainbow", anchor=False)
 
-    return llm_with_tools.invoke(messages).content
+client = Groq(
+    api_key=st.secrets["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"],
+)
 
-# Função principal que executa a aplicação Streamlit
-def main():
-    """
-    Função principal para executar a aplicação Streamlit.
-    """
-    api_key = "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"  # Chave de API definida diretamente
-    llm = ChatGroq(groq_api_key=api_key, model='llama3-70b-8192')
-    tools = [get_stock_info, get_historical_price]
-    llm_with_tools = llm.bind_tools(tools)
+# Initialize chat history and selected model
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-    st.title("Análise do Mercado de Ações com Llama 3")
-    user_question = st.text_input("Faça uma pergunta sobre preços de ações ou empresas:")
+if "selected_model" not in st.session_state:
+    st.session_state.selected_model = None
 
-    if user_question:
-        response = call_functions(llm_with_tools, user_question)
-        st.write(response)
+# Define model details
+models = {
+    "mixtral-8x7b-32768": {
+        "name": "Mixtral-8x7b-Instruct-v0.1",
+        "tokens": 32768,
+        "developer": "Mistral",
+    },
+    "llama2-70b-4096": {"name": "LLaMA2-70b-chat", "tokens": 4096, "developer": "Meta"},
+    "gemma-7b-it": {"name": "Gemma-7b-it", "tokens": 8192, "developer": "Google"},
+}
 
-# Verifica se o script é o módulo principal e executa a função main
-if __name__ == "__main__":
-    main()
+# Layout for model selection and max_tokens slider
+col1, col2 = st.columns(2)
+
+with col1:
+    model_option = st.selectbox(
+        "Choose a model:",
+        options=list(models.keys()),
+        format_func=lambda x: models[x]["name"],
+        index=0,  # Default to the first model in the list
+    )
+
+# Detect model change and clear chat history if model has changed
+if st.session_state.selected_model != model_option:
+    st.session_state.messages = []
+    st.session_state.selected_model = model_option
+
+max_tokens_range = models[model_option]["tokens"]
+
+with col2:
+    # Adjust max_tokens slider dynamically based on the selected model
+    max_tokens = st.slider(
+        "Max Tokens:",
+        min_value=512,  # Minimum value to allow some flexibility
+        max_value=max_tokens_range,
+        # Default value or max allowed if less
+        value=min(32768, max_tokens_range),
+        step=512,
+        help=f"Adjust the maximum number of tokens (words) for the model's response. Max for selected model: {max_tokens_range}",
+    )
+
+# Display chat messages from history on app rerun
+for message in st.session_state.messages:
+    avatar = "🤖" if message["role"] == "assistant" else "👨‍💻"
+    with st.chat_message(message["role"], avatar=avatar):
+        st.markdown(message["content"])
+
+
+def generate_chat_responses(chat_completion) -> Generator[str, None, None]:
+    """Yield chat response content from the Groq API response."""
+    for chunk in chat_completion:
+        if chunk.choices[0].delta.content:
+            yield chunk.choices[0].delta.content
+
+
+if prompt := st.chat_input("Enter your prompt here..."):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+
+    with st.chat_message("user", avatar="👨‍💻"):
+        st.markdown(prompt)
+
+    # Fetch response from Groq API
+    try:
+        chat_completion = client.chat.completions.create(
+            model=model_option,
+            messages=[
+                {"role": m["role"], "content": m["content"]}
+                for m in st.session_state.messages
+            ],
+            max_tokens=max_tokens,
+            stream=True,
+        )
+
+        # Use the generator function with st.write_stream
+        with st.chat_message("assistant", avatar="🤖"):
+            chat_responses_generator = generate_chat_responses(chat_completion)
+            full_response = st.write_stream(chat_responses_generator)
+    except Exception as e:
+        st.error(e, icon="🚨")
+
+    # Append the full response to session_state.messages
+    if isinstance(full_response, str):
+        st.session_state.messages.append(
+            {"role": "assistant", "content": full_response}
+        )
+    else:
+        # Handle the case where full_response is not a string
+        combined_response = "\n".join(str(item) for item in full_response)
+        st.session_state.messages.append(
+            {"role": "assistant", "content": combined_response}
+        )
