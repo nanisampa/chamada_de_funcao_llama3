@@ -5,14 +5,22 @@ import streamlit as st
 from llama_index.llms.groq import Groq as LlamaGroq
 from llama_index.core.llms import ChatMessage
 
-
+import streamlit as st
+from groq import Groq
+from llama_index.llms.groq import Groq as LlamaGroq
+from llama_index.core.llms import ChatMessage
 
 def icon(emoji: str):
     """Mostra um emoji como ícone de página no estilo Notion."""
     st.write(f'<span style="font-size: 78px; line-height: 1">{emoji}</span>', unsafe_allow_html=True)
 
+# Configuração da página
 st.set_page_config(page_icon="💬 Prof. Marcelo Claro", layout="wide", page_title="Geomaker Chat Interface")
 icon("🌎")  # Exibe o ícone do globo
+
+# Adicionando um logo (assumindo que o logo está hospedado em um URL acessível)
+st.image("https://www.example.com/logo.png", width=100)
+
 st.subheader("Geomaker Chat Streamlit App")
 st.subheader("Professor Marcelo Claro")
 
@@ -35,6 +43,13 @@ model_option = st.selectbox("Choose a model:", options=list(models.keys()), form
 max_tokens_range = models[model_option]["tokens"]
 max_tokens = st.slider("Max Tokens:", min_value=512, max_value=max_tokens_range, value=min(32768, max_tokens_range), step=512, help=f"Adjust the maximum number of tokens for the model's response: {max_tokens_range}")
 
+# Coluna de configuração para o botão de limpeza
+with st.sidebar:
+    st.write("Configurações")
+    if st.button("Limpar Conversa"):
+        st.session_state.messages = []  # Reinicia a lista de mensagens
+        st.experimental_rerun()  # Reinicia o script para atualizar o estado
+
 def process_chat_with_rag(prompt):
     """Envia mensagens para LlamaIndex e processa a resposta com RAG."""
     messages = [
@@ -54,8 +69,3 @@ for message in st.session_state.messages:
     avatar = "🤖" if message["role"] == "assistant" else "👨‍💻"
     with st.chat_message(message["role"], avatar=avatar):
         st.markdown(message["content"])
-
-# Botão para limpar a conversa
-if st.button("Limpar Conversa"):
-    st.session_state.messages = []  # Reinicia a lista de mensagens
-    st.experimental_rerun()  # Rerun the script to refresh the state
