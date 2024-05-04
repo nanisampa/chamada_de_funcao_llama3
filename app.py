@@ -9,7 +9,7 @@ def icon(emoji: str):
 
 # Configuração da página com mais opções de personalização
 st.set_page_config(page_icon="💬", layout="wide", page_title="Interface de Chat Geomaker")
-icon("")  # Exibe um ícone personalizado
+icon("🧠")  # Exibe um ícone personalizado
 
 st.subheader("Aplicativo de Chat Geomaker")
 st.write("Professor Marcelo Claro")
