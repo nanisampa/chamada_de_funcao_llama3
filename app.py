@@ -14,8 +14,7 @@ def icon(emoji: str):
 st.set_page_config(page_icon="💬 Prof. Marcelo Claro", layout="wide", page_title="Geomaker Chat Interface")
 icon("🌎")  # Exibe o ícone do globo
 
-# Adicionando um logo (assumindo que o logo está hospedado em um URL acessível)
-st.image("https://www.example.com/logo.png", width=100)
+
 
 st.subheader("Geomaker Chat Streamlit App")
 st.subheader("Professor Marcelo Claro")
@@ -41,6 +40,8 @@ max_tokens = st.slider("Max Tokens:", min_value=512, max_value=max_tokens_range,
 
 # Coluna de configuração para o botão de limpeza
 with st.sidebar:
+    # Adicionando um logo (assumindo que o logo está hospedado em um URL acessível)
+    st.image("Untitled.png", width=100)
     st.write("Configurações")
     if st.button("Limpar Conversa"):
         st.session_state.messages = []  # Reinicia a lista de mensagens
