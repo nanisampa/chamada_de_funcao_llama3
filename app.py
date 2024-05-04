@@ -5,10 +5,7 @@ import streamlit as st
 from llama_index.llms.groq import Groq as LlamaGroq
 from llama_index.core.llms import ChatMessage
 
-import streamlit as st
-from groq import Groq  # Supondo que esta seja a biblioteca correta
-from llama_index.llms.groq import Groq as LlamaGroq
-from llama_index.core.llms import ChatMessage
+
 
 def icon(emoji: str):
     """Mostra um emoji como ícone de página no estilo Notion."""
