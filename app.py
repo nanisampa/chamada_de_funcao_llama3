@@ -62,7 +62,7 @@ def generate_chat_responses(chat_completion):
             yield chunk.choices[0].delta.content
 
 # Entrada do usuário para o chat
-if prompt := st.text_input("Enter your prompt here..."):
+if prompt := st.text_input("Insira sua pergunta aqui..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     # Processamento da entrada e busca de respostas
