@@ -28,10 +28,10 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 models = {
-    "llama3-70b-8192": {"name": "LLaMA3-70b-Instruct", "tokens": 32768, "developer": "Facebook"},
-    "llama3-8b-8192": {"name": "LLaMA3-8b-chat", "tokens": 32768, "developer": "Meta"},
-    "mixtral-8x7b-32768": {"name": "Mixtral-8x7b-Instruct-v0.1", "tokens": 32768, "developer": "Mistral"},
-    "gemma-7b-it": {"name": "Gemma-7b-it", "tokens": 32768, "developer": "Google"}
+    "llama3-70b-8192": {"name": "LLaMA3-70b-Instruct", "tokens": 3276800, "developer": "Facebook"},
+    "llama3-8b-8192": {"name": "LLaMA3-8b-chat", "tokens": 3276800, "developer": "Meta"},
+    "mixtral-8x7b-32768": {"name": "Mixtral-8x7b-Instruct-v0.1", "tokens": 3276800, "developer": "Mistral"},
+    "gemma-7b-it": {"name": "Gemma-7b-it", "tokens": 3276800, "developer": "Google"}
 }
 
 model_option = st.selectbox("Choose a model:", options=list(models.keys()), format_func=lambda x: models[x]["name"], index=0)
