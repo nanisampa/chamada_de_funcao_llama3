@@ -12,13 +12,13 @@ def icon(emoji: str):
     )
 
 # Configurações iniciais da página Streamlit
-st.set_page_config(page_icon="💬", layout="wide", page_title="Groq Chat Interface")
+st.set_page_config(page_icon="💬", layout="wide", page_title="Geomaker Chat Interface")
 
 # Exibe um ícone de carro de corrida
 icon("🏎️")
 
 # Adiciona um subtítulo à página
-st.subheader("Groq Chat Streamlit App")
+st.subheader("Geomaker Chat Streamlit App")
 
 # Verificação se a chave API está configurada em st.secrets e inicialização do cliente API
 if "GROQ_API_KEY" in st.secrets:
