@@ -2,7 +2,8 @@ import streamlit as st
 from typing import Generator
 from groq import Groq
 import streamlit as st
-from groq import Groq  # Importação simplificada pois foi duplicada anteriormente
+from llama_index.llms.groq import Groq as LlamaGroq
+from llama_index.core.llms import ChatMessage
 
 def icon(emoji: str):
     """Mostra um emoji como ícone de página no estilo Notion."""
@@ -13,10 +14,10 @@ icon("🌎")  # Exibe o ícone do globo
 st.subheader("Geomaker Chat Streamlit App")
 st.subheader("Professor Marcelo Claro")
 
-if "GROQ_API_KEY" in st.secrets:
-    client = Groq(api_key=st.secrets["GROQ_API_KEY"])
-else:
-    st.error("API Key not configured in st.secrets!", icon="🚨")
+# Configuração da chave API e inicialização dos clientes
+api_key = st.secrets["GROQ_API_KEY"] if "GROQ_API_KEY" in st.secrets else "your_api_key_here"
+groq_client = Groq(api_key=api_key)
+llama_groq = LlamaGroq(model="llama3-70b-8192", api_key=api_key)  # Usando LlamaGroq para RAG
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -39,21 +40,19 @@ if st.session_state.selected_model != model_option:
 max_tokens_range = models[model_option]["tokens"]
 max_tokens = st.slider("Max Tokens:", min_value=512, max_value=max_tokens_range, value=min(32768, max_tokens_range), step=512, help=f"Adjust the maximum number of tokens for the model's response: {max_tokens_range}")
 
-def generate_chat_responses(chat_completion):
-    for chunk in chat_completion:
-        if chunk.choices[0].delta.content:
-            yield chunk.choices[0].delta.content
+def process_chat_with_rag(prompt):
+    """Envia mensagens para LlamaIndex e processa a resposta com RAG."""
+    messages = [
+        ChatMessage(role="system", content="You are a helpful assistant with extensive knowledge."),
+        ChatMessage(role="user", content=prompt)
+    ]
+    response = llama_groq.chat(messages)
+    return response
 
 if prompt := st.text_input("Insira sua pergunta aqui..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
-    try:
-        chat_completion = client.chat.completions.create(model=model_option, messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages], max_tokens=max_tokens, stream=True)
-        chat_responses_generator = generate_chat_responses(chat_completion)
-        full_response = "".join(list(chat_responses_generator))
-        if full_response:
-            st.session_state.messages.append({"role": "assistant", "content": full_response})
-    except Exception as e:
-        st.error(f"Error: {e}", icon="🚨")
+    response = process_chat_with_rag(prompt)
+    st.session_state.messages.append({"role": "assistant", "content": response})
 
 # Exibição das mensagens do chat
 for message in st.session_state.messages:
