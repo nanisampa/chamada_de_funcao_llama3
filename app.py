@@ -3,6 +3,7 @@ from typing import Generator
 from groq import Groq
 
 
+
 # Definindo uma função para exibir ícones em estilo grande, similar ao Notion
 def icon(emoji: str):
     """Mostra um emoji como ícone de página no estilo Notion."""
@@ -20,7 +21,7 @@ icon("🏎️")
 # Adiciona um subtítulo à página
 st.subheader("Geomaker Chat Streamlit App")
 
-# Verificação se a chave API está configurada em st.secrets e inicialização do cliente API
+# Verifica se a chave API está configurada em st.secrets e inicializa o cliente API
 if "GROQ_API_KEY" in st.secrets:
     from groq import Groq  # Importa a biblioteca Groq assumindo sua existência
     client = Groq(api_key=st.secrets["GROQ_API_KEY"])
@@ -37,12 +38,10 @@ if "selected_model" not in st.session_state:
 # Dicionário com detalhes dos modelos disponíveis
 models = {
     "llama3-70b-8192": {"name": "LLaMA3-70b-Instruct", "tokens": 8192, "developer": "Facebook"},
-    ""llama2-70b-4096": {"name": "LLaMA2-70b-chat", "tokens": 4096, "developer": "Meta"},
+    "llama2-70b-4096": {"name": "LLaMA2-70b-chat", "tokens": 4096, "developer": "Meta"},
     "mixtral-8x7b-32768": {"name": "Mixtral-8x7b-Instruct-v0.1", "tokens": 32768, "developer": "Mistral"},
     "gemma-7b-it": {"name": "Gemma-7b-it", "tokens": 8192, "developer": "Google"}
-   
 }
-
 
 # Interface para seleção do modelo
 model_option = st.selectbox(
@@ -76,7 +75,7 @@ def generate_chat_responses(chat_completion):
             yield chunk.choices[0].delta.content
 
 # Interface de entrada de chat
-if prompt := st.chat_input("Enter your prompt here..."):
+if prompt := st.text_input("Enter your prompt here..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     # Processa a entrada do usuário e busca respostas da API
