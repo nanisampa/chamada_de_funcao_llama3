@@ -26,6 +26,8 @@ except Exception as e:
 # Inicialização do estado da sessão
 if "messages" not in st.session_state:
     st.session_state.messages = []
+if 'show_manual' not in st.session_state:
+    st.session_state.show_manual = False  # Manual inicialmente oculto
 
 # Configuração dos modelos disponíveis com descrição detalhada
 models = {
@@ -43,7 +45,18 @@ max_tokens = st.slider("Máximo de Tokens:", min_value=512, max_value=max_tokens
 with st.sidebar:
     st.image("Untitled.png", width=100)
     st.write("Configurações")
-    st.write("Prompt System Padrão")
+    if st.button("Mostrar/Ocultar Manual de Uso"):
+        st.session_state.show_manual = not st.session_state.show_manual
+
+    if st.session_state.show_manual:
+        # Manual de Uso detalhado aqui
+        st.write("## Manual de Uso")
+        st.write("### Introdução")
+        st.write("Bem-vindo ao Aplicativo de Chat Geomaker! Este aplicativo permite interagir com modelos avançados de linguagem artificial para gerar respostas baseadas em suas perguntas.")
+        st.write("### Como Iniciar")
+        st.write("- Acesse a interface principal.\n- Visualize o menu de seleção de modelos na parte superior da tela.")
+
+    # Campo para definir o prompt do sistema
     system_prompt = st.text_area("Defina o prompt do sistema:")
     if st.button("Confirmar Prompt"):
         st.session_state.system_prompt = system_prompt
