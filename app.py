@@ -51,7 +51,58 @@ with st.sidebar:
     if st.session_state.show_manual:
         # Manual de Uso detalhado aqui
         st.write("## Manual de Uso")
-        st.write("### Introdução")
+                       
+        # Introdução
+        st.write("""
+        ### Introdução
+        Bem-vindo ao Aplicativo de Chat Geomaker! Este aplicativo permite interagir com modelos avançados de linguagem artificial para gerar respostas baseadas em suas perguntas.
+        """)
+
+        # Como Iniciar
+        st.write("""
+        ### Como Iniciar
+        - Acesse a interface principal.
+        - Visualize o menu de seleção de modelos na parte superior da tela.
+        """)
+
+        # Escolha de Modelos
+        st.write("""
+        ### Escolha de Modelos
+        - Use o dropdown para selecionar o modelo de linguagem desejado.
+        - Cada modelo possui uma descrição de suas capacidades e limitações.
+        """)
+
+        # Envio de Mensagens
+        st.write("""
+        ### Envio de Mensagens
+        - Digite sua pergunta na área 'Insira sua pergunta aqui...'.
+        - Clique em enviar para ver a resposta do modelo selecionado.
+        """)
+
+        # Ajustes de Configuração
+        st.write("""
+        ### Ajustes de Configuração
+        - Ajuste o número máximo de tokens que o modelo deve processar usando o slider abaixo da seleção do modelo.
+        """)
+
+        # Uso Avançado
+        st.write("""
+        ### Uso Avançado
+        - Explore funcionalidades avançadas acessando as configurações no canto inferior da barra lateral.
+        """)
+
+        # Resolução de Problemas
+        st.write("""
+        ### Resolução de Problemas
+        Se encontrar problemas, reinicie o aplicativo ou entre em contato com o suporte técnico.
+        """)
+
+        # Feedback e Melhorias
+        st.write("""
+        ### Feedback e Melhorias
+        - Sua opinião é importante para nós! Use o formulário de feedback disponível na aba de configurações para enviar suas sugestões.
+        """)
+
         st.write("Bem-vindo ao Aplicativo de Chat Geomaker! Este aplicativo permite interagir com modelos avançados de linguagem artificial para gerar respostas baseadas em suas perguntas.")
         st.write("### Como Iniciar")
         st.write("- Acesse a interface principal.\n- Visualize o menu de seleção de modelos na parte superior da tela.")
