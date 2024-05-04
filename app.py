@@ -51,7 +51,7 @@ def process_chat_with_rag(prompt):
     response = llama_groq.chat(messages)
     return response
 
-if prompt := st.text_input("Insira sua pergunta aqui..."):
+if prompt := st.text_area("Insira sua pergunta aqui..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     response = process_chat_with_rag(prompt)
     st.session_state.messages.append({"role": "assistant", "content": response})
