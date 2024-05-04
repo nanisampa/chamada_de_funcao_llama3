@@ -8,7 +8,7 @@ def icon(emoji: str):
     st.write(f'<span style="font-size: 78px; line-height: 1">{emoji}</span>', unsafe_allow_html=True)
 
 st.set_page_config(page_icon="💬 Prof. Marcelo Claro", layout="wide", page_title="Geomaker Chat Interface")
-icon("🌎")  # Exibe o ícone do globo
+icon("")  # Exibe o ícone do globo
 
 st.subheader("Geomaker Chat Streamlit App")
 st.write("Professor Marcelo Claro")
