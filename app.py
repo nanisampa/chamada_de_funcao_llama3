@@ -16,7 +16,7 @@ def icon(emoji: str):
 st.set_page_config(page_icon="💬", layout="wide", page_title="Geomaker Chat Interface")
 
 # Exibe um ícone de carro de corrida
-icon("🏎️")
+icon("🌎")
 
 # Adiciona um subtítulo à página
 st.subheader("Geomaker Chat Streamlit App")
