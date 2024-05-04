@@ -11,7 +11,7 @@ st.set_page_config(page_icon="💬 Prof. Marcelo Claro", layout="wide", page_tit
 icon("🌎")  # Exibe o ícone do globo
 
 st.subheader("Geomaker Chat Streamlit App")
-st.subheader("Professor Marcelo Claro")
+st.write("Professor Marcelo Claro")
 
 api_key = st.secrets["GROQ_API_KEY"] if "GROQ_API_KEY" in st.secrets else "your_api_key_here"
 groq_client = Groq(api_key=api_key)
