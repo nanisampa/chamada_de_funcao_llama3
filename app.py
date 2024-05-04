@@ -2,10 +2,6 @@ import streamlit as st
 from typing import Generator
 from groq import Groq
 import streamlit as st
-from llama_index.llms.groq import Groq as LlamaGroq
-from llama_index.core.llms import ChatMessage
-
-import streamlit as st
 from groq import Groq
 from llama_index.llms.groq import Groq as LlamaGroq
 from llama_index.core.llms import ChatMessage
