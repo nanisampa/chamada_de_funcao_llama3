@@ -36,10 +36,13 @@ if "selected_model" not in st.session_state:
 
 # Dicionário com detalhes dos modelos disponíveis
 models = {
-    "llama3-70b-8192": {"name": "LLaMA3-70b-chat", "tokens": 8192, "developer": "Meta"},
+    "llama3-70b-8192": {"name": "LLaMA3-70b-Instruct", "tokens": 8192, "developer": "Facebook"},
+    "gpt-4-175b-4096": {"name": "GPT-4-175b-chat", "tokens": 4096, "developer": "OpenAI"},
     "mixtral-8x7b-32768": {"name": "Mixtral-8x7b-Instruct-v0.1", "tokens": 32768, "developer": "Mistral"},
     "gemma-7b-it": {"name": "Gemma-7b-it", "tokens": 8192, "developer": "Google"},
+    "bert-large-340m": {"name": "BERT Large Chat", "tokens": 2048, "developer": "Google"}
 }
+
 
 # Interface para seleção do modelo
 model_option = st.selectbox(
