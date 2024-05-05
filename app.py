@@ -59,7 +59,7 @@ with st.sidebar:
         Este projeto utiliza a tecnologia de Modelo de Linguagem de Última Geração (LLM) para criar um ambiente interativo onde professores e alunos da educação básica podem aprender e tirar dúvidas em tempo real. 
         
         ### Como Funciona?
-        1. **Interface Amigável:** Uma aplicação simples e intuitiva no Streamlit que professores e crianças podem usar facilmente.
+        1. **Interface Amigável:** Desenvolva uma aplicação atraente e fácil de usar no Streamlit, acessível para professores e crianças. Com essa ferramenta, é possível criar planos de aula personalizados, resumos de conteúdo interativos e aprender programação de forma divertida, limitado apenas pela imaginação!
         2. **Perguntas e Respostas:** Alunos digitam suas dúvidas e o ChatBot, alimentado pelos modelos LLaMA3-70b, llama3-8b, mixtral-8x7b e gemma-7b-it, responde com explicações claras e precisas.
         3. **Apoio Pedagógico:** Desde matemática até ciências, nosso ChatBot ajuda no reforço escolar e incentiva a curiosidade!
         4. **Acessível a Todos:** Totalmente online, acessível via navegador em qualquer dispositivo conectado à internet.
