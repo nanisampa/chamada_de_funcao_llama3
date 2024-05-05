@@ -115,7 +115,7 @@ with st.sidebar:
 
 
     # Campo para definir o prompt do sistema
-    system_prompt = st.text_area("Defina o prompt do sistema:")
+    system_prompt = st.text_area("Defina o prompt do sistema: - Busque o catalogo de prompt para educador.")
     if st.button("Confirmar Prompt"):
         st.session_state.system_prompt = system_prompt
     if st.button("Limpar Conversa"):
