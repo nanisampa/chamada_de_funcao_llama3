@@ -120,7 +120,7 @@ with st.sidebar:
     if st.button("Limpar Conversa"):
         st.session_state.messages = []
         st.experimental_rerun()
-    st.image("Untitled.png", width=100)
+    st.image("eu.ico", width=100)
     st.write("""
     Projeto Geomaker + IA 
     - Professor: Marcelo Claro.
