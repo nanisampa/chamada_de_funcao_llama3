@@ -75,6 +75,8 @@ with st.sidebar:
         # Envio de Mensagens
         st.write("""
         ### Envio de Mensagens
+        - Antes de digitar a pergunta, defina o prompt do sistema e confirme o prompt.
+        - Você pode deixar em branco e confirma o prompt, caso não queira criar um agente.
         - Digite sua pergunta na área 'Insira sua pergunta aqui...'.
         - Clique em enviar para ver a resposta do modelo selecionado.
         """)
