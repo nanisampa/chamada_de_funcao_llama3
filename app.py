@@ -54,8 +54,15 @@ with st.sidebar:
                        
         # Introdução
         st.write("""
-        ### Introdução
+        ### Introdução 📖
         Bem-vindo ao Aplicativo de Chat Geomaker! Este aplicativo permite interagir com modelos avançados de linguagem artificial para gerar respostas baseadas em suas perguntas.
+        Este projeto utiliza a tecnologia de Modelo de Linguagem de Última Geração (LLM) para criar um ambiente interativo onde alunos da educação básica podem aprender e tirar dúvidas em tempo real. 🤖✨
+        **Como Funciona?**
+        1. **Interface Amigável:** Uma aplicação simples e intuitiva no Streamlit que crianças podem usar facilmente.
+        2. **Perguntas e Respostas:** Alunos digitam suas dúvidas e o ChatBot, alimentado pelos modelos LLaMA3-70b, llama3-8b, mixtral-8x7b e gemma-7b-it, responde com explicações claras e precisas.
+        3. **Apoio Pedagógico:** Desde matemática até ciências, nosso ChatBot ajuda no reforço escolar e incentiva a curiosidade!
+        4. **Acessível a Todos:** Totalmente online, acessível via navegador em qualquer dispositivo conectado à internet.
+
         """)
 
         # Como Iniciar
@@ -113,6 +120,14 @@ with st.sidebar:
     if st.button("Limpar Conversa"):
         st.session_state.messages = []
         st.experimental_rerun()
+    st.image("Untitled.png", width=100)
+    st.write("""
+    Projeto Geomaker + IA 
+    - Professor: Marcelo Claro.
+    Contatos: marceloclaro@gmail.com
+    Whatsapp: (88)981587145
+    Instagram: https://www.instagram.com/marceloclaro.geomaker/
+    """)
 
 # Processamento de chat com RAG com validação
 def process_chat_with_rag(prompt):
@@ -137,3 +152,4 @@ for message in st.session_state.messages:
     avatar = "🤖" if message["role"] == "assistant" else "👨‍💻"
     with st.chat_message(message["role"], avatar=avatar):
         st.markdown(message["content"])
+
